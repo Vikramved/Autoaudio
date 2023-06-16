@@ -2,3 +2,4 @@ tgcrypto
 pyrogram
 langdetect
 pydub
+ffmpeg
