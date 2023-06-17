@@ -1,90 +1,51 @@
-import os
-
 from pyrogram import Client, filters
-
-from pydub import AudioSegment
-
-from langdetect import detect
-
-# Telegram API credentials
+from pyrogram.types import Message
+from ffprobe import FFProbe
 
 api_id = "15428219"
-
 api_hash = "0042e5b26181a1e95ca40a7f7c51eaa7"
-
 bot_token = "5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc"
 
-# Create the Pyrogram client
+# Initialize the Pyrogram client
+app = Client("telegram_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
-app = Client("caption_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
-# Function to detect the language of an audio file
 
-def detect_language(file_path):
+# Filter to handle incoming messages with media
+@Client.on_message(filters.media)
+def handle_media(bot: Client, message: Message):
+    # Get the media file ID
+    file_id = message.media.document.file_id
 
-    audio = AudioSegment.from_file(file_path)
+    # Download the media file
+    file_path = bot.download_media(file_id)
 
-    audio.export("temp.wav", format="wav")
+    # Use FFprobe to analyze the media file
+    probe = FFProbe(file_path)
+    audio_streams = probe.audio_streams
 
-    lang = detect("temp.wav")
+    # Extract audio language information
+    languages = set()
+    for stream in audio_streams:
+        language = stream.tags.get("language")
+        if language:
+            languages.add(language)
 
-    os.remove("temp.wav")
+    # Build the caption based on the extracted audio languages
+    if len(languages) > 1:
+        caption = "Audio: " + "+".join(languages)
+    elif len(languages) == 1:
+        caption = "Audio: " + list(languages)[0]
+    else:
+        caption = "No audio language information found."
 
-    return lang
+    # Send the media file with the caption as its caption
+    bot.send_document(chat_id=message.chat.id, document=file_path, caption=caption)
 
-# Handler for incoming messages
+    # Delete the downloaded file
+    bot.remove(file_path)
 
-@app.on_message(filters.document)
 
-def handle_message(client, message):
-
-    # Check if the document is a movie file
-
-    if message.document.mime_type.startswith("video"):
-
-        # Download the file
-
-        file_path = client.download_media(message, file_name="movie_file")
-
-        
-
-        # Detect the language of the audio
-
-        lang = detect_language(file_path)
-
-        
-
-        # Format the audio language information
-
-        audio_info = f"Audio: {lang}"
-
-        
-
-        # Add the audio language information to the caption
-
-        caption = message.caption if message.caption else ""
-
-        if "Audio:" not in caption:
-
-            caption = f"{caption}\n{audio_info}"
-
-        
-
-        # Update the caption of the message
-
-        client.edit_message_caption(
-
-            message.chat.id,
-
-            message.message_id,
-
-            caption
-
-        )
-
-# Start the bot
-
-print("sett")
-
+# Run the bot
+print("start")
 app.run()
-
