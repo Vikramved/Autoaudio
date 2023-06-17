@@ -1,5 +1,3 @@
 tgcrypto
 pyrogram
-langdetect
-pydub
-ffmpeg-python
+ffprobe-python
