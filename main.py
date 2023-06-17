@@ -1,8 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from ffprobe import FFProbe
-from concurrent.futures import ThreadPoolExecutor
-from pyrogram.errors import MessageNotModified
 import logging
 
 # Configure logging
@@ -21,19 +19,13 @@ def handle_media(bot: Client, message: Message):
     # Get the media file ID
     file_id = message.media.document.file_id
 
-    # Use a thread pool executor for parallel processing
-    with ThreadPoolExecutor() as executor:
-        # Download the media file
-        file_path = bot.download_media(file_id)
+    # Download the media file
+    file_path = bot.download_media(file_id)
 
-        # Submit the analysis task to the executor
-        future = executor.submit(analyze_media, bot, message.chat.id, file_path)
+    # Log the start of language detection
+    logging.info("Language detection started...")
 
-        # Add a callback to send the file with the caption when analysis is complete
-        future.add_done_callback(lambda f: send_media_with_caption(bot, message.chat.id, file_id, f.result()))
-
-# Function to analyze the media file and extract the language information
-def analyze_media(bot: Client, chat_id: int, file_path: str):
+    # Use FFprobe to analyze the media file
     probe = FFProbe(file_path)
     audio_streams = probe.audio_streams
 
@@ -43,9 +35,9 @@ def analyze_media(bot: Client, chat_id: int, file_path: str):
         language = stream.tags.get("language")
         if language:
             languages.add(language)
-
+    
     # Log the detected languages
-    logging.info(f"Bot detected languages: {languages}")
+    logging.info(f"Detected languages: {languages}")
 
     # Build the caption based on the extracted audio languages
     if len(languages) > 1:
@@ -55,23 +47,13 @@ def analyze_media(bot: Client, chat_id: int, file_path: str):
     else:
         caption = "No audio language information found."
 
-    return (file_path, caption)
-
-# Function to send the media file with the caption
-def send_media_with_caption(bot: Client, chat_id: int, file_id: str, result):
-    file_path, caption = result
-
-    # Log the media file detection
-    logging.info(f"Bot detected media file: {file_path}")
-
     # Send the media file with the caption as its caption
-    try:
-        bot.send_document(chat_id=chat_id, document=file_path, caption=caption)
-    except MessageNotModified:
-        pass
+    bot.send_document(chat_id=message.chat.id, document=file_path, caption=caption)
 
     # Delete the downloaded file
     bot.remove(file_path)
 
+
 # Run the bot
+print("start")
 app.run()
