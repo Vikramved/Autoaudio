@@ -3,7 +3,7 @@ import pyrogram
 bot = pyrogram.Client("my_bot", api_id="15428219", api_hash="0042e5b26181a1e95ca40a7f7c51eaa7", bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc")
 
 @bot.on_message()
-async def handle_message(message):
+async def handle_message(client, message):
     if message.text.startswith("@admin"):
         report_text = message.text[6:]
         report_time = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
