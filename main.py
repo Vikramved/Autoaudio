@@ -11,7 +11,7 @@ db = pymongo.MongoClient("mongodb+srv://RP:RP@tgreporter.fgojwcu.mongodb.net/?re
 async def handle_message(client, message):
     if message.text.startswith("@admin"):
         report_text = message.text[6:]
-        report_time = f"{datetime.datetime.now().strftime('%H:%M:%S')}"
+        report_time = f"{datetime.datetime.now().strftime('%I:%M:%S %p')}"
         report_date = f"Report Date:- {datetime.datetime.now().strftime('%d-%m-%Y')}"
         report_day = f"Report Day:- {datetime.datetime.now().strftime('%A')}"
         track_id = f"#MB{random.randint(1, 1000000)}"
@@ -30,4 +30,4 @@ async def handle_message(client, message):
         await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
 
 print("❗️🙌🏻❗️🙌🏻❗️")
-bot.run()
+bot.run()                                 
