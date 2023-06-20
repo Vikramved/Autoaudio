@@ -8,14 +8,9 @@ async def handle_message(client, message):
     if message.text.startswith("@admin"):
         report_text = message.text[6:]
         report_time = f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        print("report_time")
         track_id = f"#MB{message.chat.id}"
-        await message.reply("Report sent successfully")
-        await message.reply(f"Reporter: {message.from_user.username}")
-        await message.reply(f"Reporter Id: {message.from_user.id}")
-        await message.reply(f"Track id: {track_id}")
-        await message.reply(f"Report Text: {report_text}")
-        await message.reply(f"Report Time: {report_time}")
+        report = f"Reporter: {message.from_user.username}\nReporter Id: {message.from_user.id}\nTrack id: {track_id}\nReport Text: {report_text}\nReport Time: {report_time}"
+        await message.reply(report)
 
 print("❗️🙌🏻❗️🙌🏻❗️")
 bot.run()
