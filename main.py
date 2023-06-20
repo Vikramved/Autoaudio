@@ -26,7 +26,7 @@ def handle_admin_message(client, message):
         "Report sent successfully\n"
         f"Reporter: {sender_username}\n"
         f"Reporter Id: {sender_id}\n"
-        f"Track id: #MB{sender_id % 10}{sender_id % 10 + 1}\n"
+        f"Track id: #MB{sender_id % 10}{(sender_id % 10) + 1}\n"
         f"Report Text: {report_text}\n"
         f"Report Time: {report_time}"
     )
@@ -36,5 +36,5 @@ def handle_admin_message(client, message):
 
 
 # Start the bot
-print("Started")
+print("💝💝💝💝💝💝💝💝")
 app.run()
