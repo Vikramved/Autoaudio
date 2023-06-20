@@ -1,6 +1,7 @@
 import pyrogram
 import datetime
 import random
+import time
 import pymongo
 
 bot = pyrogram.Client("my_bot", api_id="15428219", api_hash="0042e5b26181a1e95ca40a7f7c51eaa7", bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc")
@@ -10,6 +11,9 @@ db = pymongo.MongoClient("mongodb+srv://RPN:RPN@tgreporternew.rys1amm.mongodb.ne
 @bot.on_message()
 async def handle_message(client, message):
     if message.text.startswith("@admin"):
+        # Send the loading message
+        loading_message = await message.reply("Report sending ○○○○○○○○○")
+
         report_text = message.text[6:]
         report_time = f"{datetime.datetime.now().strftime('%I:%M:%S %p')}"
         report_date = f"{datetime.datetime.now().strftime('%d-%m-%Y')}"
@@ -29,6 +33,15 @@ async def handle_message(client, message):
         db.reports.insert_one(report)
         now_in_india = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=5, minutes=30)))
         report_time_in_india = f"{now_in_india.strftime('%I:%M:%S %p')}"
+        
+        # Update the loading message with the filled animation
+        for i in range(10):
+            filled = "●" * (i + 1)
+            unfilled = "○" * (10 - (i + 1))
+            loading_bar = f"Report sending {filled}{unfilled}"
+            await loading_message.edit_text(loading_bar)
+            time.sleep(0.5)
+
         await message.reply(f"{report['report_top']}\n\n👤 Rᴇᴘᴏʀᴛᴇʀ: {report['reporter']}\n🆔 Rᴇᴘᴏʀᴛᴇʀ ɪᴅ: {report['reporter_id']}\n📜 Tʀᴀᴄᴋ ɪᴅ: {report['track_id']}\n\n💬 Rᴇᴘᴏᴛʀ ᴛᴇxᴛ : {report['report_text']}\n\n⌚ Rᴇᴘᴏʀᴛ ᴛɪᴍᴇ: {report_time_in_india}\n🗓️ Rᴇᴘᴏʀᴛ ᴅᴀᴛᴇ: {report['report_date']}\n⛅ Rᴇᴘᴏʀᴛ ᴅᴀʏ: {report['report_day']}")
         channel_id = -1001904370879
         await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report_time_in_india}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
