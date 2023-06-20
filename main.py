@@ -25,9 +25,11 @@ async def handle_message(client, message):
             "report_day": report_day,
         }
         db.reports.insert_one(report)
-        await message.reply(f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
+        now_in_india = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=5, minutes=30)))
+        report_time_in_india = f"{now_in_india.strftime('%I:%M:%S %p')}"
+        await message.reply(f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report_time_in_india}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
         channel_id = -1001904370879
-        await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
+        await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report_time_in_india}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
 
 print("❗️🙌🏻❗️🙌🏻❗️")
-bot.run()                                 
+bot.run()
