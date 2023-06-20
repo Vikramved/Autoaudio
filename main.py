@@ -21,9 +21,9 @@ async def handle_message(client, message):
             "report_time": report_time,
         }
         db.reports.insert_one(report)
-        await message.reply(report)
+        await message.reply(f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}")
         channel_id = -1001904370879
-        await client.send_message(channel_id, report)
+        await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}")
 
 print("❗️🙌🏻❗️🙌🏻❗️")
 bot.run()
