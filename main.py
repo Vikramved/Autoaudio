@@ -8,7 +8,7 @@ app = Client("my_bot",
             )
 
 # Define the filter for messages containing "@admin"
-@admin_filter := filters.create(lambda _, __, message: "@admin" in message.text.lower())
+@admin_filter := filters.create(lambda client, _, message: "@admin" in message.text.lower())
 
 # Handle the messages that match the filter
 @app.on_message(admin_filter)
