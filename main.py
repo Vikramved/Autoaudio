@@ -42,6 +42,8 @@ async def handle_message(client, message):
             await loading_message.edit_text(loading_bar)
             time.sleep(0.5)
 
+        await loading_message.delete()
+
         await message.reply(f"{report['report_top']}\n\n👤 Rᴇᴘᴏʀᴛᴇʀ: {report['reporter']}\n🆔 Rᴇᴘᴏʀᴛᴇʀ ɪᴅ: {report['reporter_id']}\n📜 Tʀᴀᴄᴋ ɪᴅ: {report['track_id']}\n\n💬 Rᴇᴘᴏᴛʀ ᴛᴇxᴛ : {report['report_text']}\n\n⌚ Rᴇᴘᴏʀᴛ ᴛɪᴍᴇ: {report_time_in_india}\n🗓️ Rᴇᴘᴏʀᴛ ᴅᴀᴛᴇ: {report['report_date']}\n⛅ Rᴇᴘᴏʀᴛ ᴅᴀʏ: {report['report_day']}")
         channel_id = -1001904370879
         await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report_time_in_india}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
