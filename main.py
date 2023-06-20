@@ -14,7 +14,7 @@ async def handle_message(client, message):
         report_time = f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         track_id = f"#MB{random.randint(1, 1000000)}"
         report = {
-            "reporter": message.from_user.username,
+            "reporter": message.from_user.firstname,
             "reporter_id": message.from_user.id,
             "track_id": track_id,
             "report_text": report_text,
