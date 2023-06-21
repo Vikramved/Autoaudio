@@ -44,4 +44,8 @@ async def handle_message(client, message):
         await client.send_message(channel_id, f"Reporter: {message.from_user.first_name}\nReporter ID: {message.from_user.id}\nTrack ID: {track_id}\nReport Text: {report_text}\nReport Time: {report_time}\nReport Date: {report_date}\nReport Day: {report_day}")
 
 print("❗️🙌🏻❗️🙌🏻❗️")
-bot.run()
+
+app = bot.export_session_string()
+bot.stop()
+
+app.run(host="0.0.0.0", port=3000)
