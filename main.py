@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# Navigate to the directory containing your Python script
+cd /path/to/your/python/script/directory
+
+# Start the Python script
+python - << EOF
 import pyrogram
 import datetime
 import random
@@ -5,7 +12,12 @@ import time
 import pymongo
 import pytz
 
-bot = pyrogram.Client("my_bot", api_id="15428219", api_hash="0042e5b26181a1e95ca40a7f7c51eaa7", bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc")
+bot = pyrogram.Client(
+    "my_bot",
+    api_id="15428219",
+    api_hash="0042e5b26181a1e95ca40a7f7c51eaa7",
+    bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc"
+)
 
 db = pymongo.MongoClient("mongodb+srv://RPN:RPN@tgreporternew.rys1amm.mongodb.net/?retryWrites=true&w=majority").my_db
 
@@ -55,3 +67,4 @@ async def handle_message(client, message):
 
 print("❗️🙌🏻❗️🙌🏻❗️")
 bot.run()
+EOF
