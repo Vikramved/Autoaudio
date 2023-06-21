@@ -2,7 +2,7 @@ const { Telegraf } = require('telegraf');
 const { MongoClient } = require('mongodb');
 const moment = require('moment-timezone');
 
-const bot = new Telegraf('YOUR_BOT_TOKEN');
+const bot = new Telegraf('5166769555:AAGEVsxFuRxUjiFmBxrtjZ7qjv2SeZYRp_s');
 
 const dbClient = new MongoClient('mongodb+srv://RPN:RPN@tgreporternew.rys1amm.mongodb.net/', {
   useNewUrlParser: true,
