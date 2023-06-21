@@ -1,10 +1,3 @@
-#!/bin/bash
-
-# Navigate to the directory containing your Python script
-cd /path/to/your/python/script/directory
-
-# Start the Python script
-python - << EOF
 import pyrogram
 import datetime
 import random
@@ -67,4 +60,3 @@ async def handle_message(client, message):
 
 print("❗️🙌🏻❗️🙌🏻❗️")
 bot.run()
-EOF
