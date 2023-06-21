@@ -2,7 +2,6 @@ import pyrogram
 import datetime
 import random
 import time
-import pymongo
 import pytz
 
 bot = pyrogram.Client(
@@ -11,8 +10,6 @@ bot = pyrogram.Client(
     api_hash="0042e5b26181a1e95ca40a7f7c51eaa7",
     bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc"
 )
-
-db = pymongo.MongoClient("mongodb+srv://RPN:RPN@tgreporternew.rys1amm.mongodb.net/?retryWrites=true&w=majority").my_db
 
 @bot.on_message()
 async def handle_message(client, message):
@@ -32,18 +29,6 @@ async def handle_message(client, message):
         track_id = f"#MB{random.randint(1, 1000000)}"
         report_top = "✅ Rᴇᴘᴏʀᴛ sᴇɴᴅ ᴛᴏ ᴀᴅᴍɪɴ ✅"
 
-        report = {
-            "report_top": report_top,
-            "reporter": message.from_user.first_name,
-            "reporter_id": message.from_user.id,
-            "track_id": track_id,
-            "report_text": report_text,
-            "report_time": report_time,
-            "report_date": report_date,
-            "report_day": report_day,
-        }
-        db.reports.insert_one(report)
-
         # Update the loading message with the filled animation
         for i in range(10):
             filled = "●" * (i + 1)
@@ -54,9 +39,9 @@ async def handle_message(client, message):
 
         await loading_message.delete()
 
-        await message.reply(f"{report['report_top']}\n\n👤 Rᴇᴘᴏʀᴛᴇʀ: {report['reporter']}\n🆔 Rᴇᴘᴏʀᴛᴇʀ ɪᴅ: {report['reporter_id']}\n📜 Tʀᴀᴄᴋ ɪᴅ: {report['track_id']}\n\n💬 Rᴇᴘᴏᴛʀ ᴛᴇxᴛ : {report['report_text']}\n\n⌚ Rᴇᴘᴏʀᴛ ᴛɪᴍᴇ: {report['report_time']}\n🗓️ Rᴇᴘᴏʀᴛ ᴅᴀᴛᴇ: {report['report_date']}\n⛅ Rᴇᴘᴏʀᴛ ᴅᴀʏ: {report['report_day']}")
+        await message.reply(f"{report_top}\n\n👤 Rᴇᴘᴏʀᴛᴇʀ: {message.from_user.first_name}\n🆔 Rᴇᴘᴏʀᴛᴇʀ ɪᴅ: {message.from_user.id}\n📜 Tʀᴀᴄᴋ ɪᴅ: {track_id}\n\n💬 Rᴇᴘᴏᴛʀ ᴛᴇxᴛ : {report_text}\n\n⌚ Rᴇᴘᴏʀᴛ ᴛɪᴍᴇ: {report_time}\n🗓️ Rᴇᴘᴏʀᴛ ᴅᴀᴛᴇ: {report_date}\n⛅ Rᴇᴘᴏʀᴛ ᴅᴀʏ: {report_day}")
         channel_id = -1001904370879
-        await client.send_message(channel_id, f"Reporter: {report['reporter']}\nReporter ID: {report['reporter_id']}\nTrack ID: {report['track_id']}\nReport Text: {report['report_text']}\nReport Time: {report['report_time']}\nReport Date: {report['report_date']}\nReport Day: {report['report_day']}")
+        await client.send_message(channel_id, f"Reporter: {message.from_user.first_name}\nReporter ID: {message.from_user.id}\nTrack ID: {track_id}\nReport Text: {report_text}\nReport Time: {report_time}\nReport Date: {report_date}\nReport Day: {report_day}")
 
 print("❗️🙌🏻❗️🙌🏻❗️")
 bot.run()
