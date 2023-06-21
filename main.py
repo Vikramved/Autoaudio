@@ -3,6 +3,9 @@ import datetime
 import random
 import time
 import pytz
+from flask import Flask
+
+app = Flask(__name__)
 
 bot = pyrogram.Client(
     "my_bot",
@@ -10,6 +13,12 @@ bot = pyrogram.Client(
     api_hash="0042e5b26181a1e95ca40a7f7c51eaa7",
     bot_token="5166769555:AAFM8gtzAOJ4H9MRteci8QSvjO4f6m8YTCc"
 )
+
+db = pymongo.MongoClient("mongodb+srv://RPN:RPN@tgreporternew.rys1amm.mongodb.net/?retryWrites=true&w=majority").my_db
+
+@app.route("/")
+def home():
+    return "Server is running!"
 
 @bot.on_message()
 async def handle_message(client, message):
@@ -43,5 +52,20 @@ async def handle_message(client, message):
         channel_id = -1001904370879
         await client.send_message(channel_id, f"Reporter: {message.from_user.first_name}\nReporter ID: {message.from_user.id}\nTrack ID: {track_id}\nReport Text: {report_text}\nReport Time: {report_time}\nReport Date: {report_date}\nReport Day: {report_day}")
 
+        report = {
+            "report_top": report_top,
+            "reporter": message.from_user.first_name,
+            "reporter_id": message.from_user.id,
+            "track_id": track_id,
+            "report_text": report_text,
+            "report_time": report_time,
+            "report_date": report_date,
+            "report_day": report_day,
+        }
+        db.reports.insert_one(report)
+
 print("❗️🙌🏻❗️🙌🏻❗️")
-bot.run()
+bot.start()
+
+if __name__ == "__main__":
+    app.run(port=3000)
