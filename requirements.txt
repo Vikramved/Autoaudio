@@ -1,3 +1,5 @@
 pyrogram
 tgcrypto
 pytz
+Flask
+pymongo
